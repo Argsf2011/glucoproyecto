@@ -104,9 +104,6 @@
                     <i class="fa-solid fa-star text-amber-500"></i>
                     <span id="score-display">0 pts</span>
                 </div>
-                <button onclick="autoCompleteAllModules()" class="hidden md:inline-flex items-center gap-1.5 text-xs bg-teal-50 hover:bg-teal-100 text-teal-700 font-bold px-3 py-1.5 rounded-xl border border-teal-200 transition" title="Autocompletar Todo (Modo Experto)">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> Autocompletar
-                </button>
                 <button onclick="resetProgress()" class="text-xs text-slate-400 hover:text-rose-600 font-medium px-2 py-1 rounded transition" title="Reiniciar Progreso">
                     <i class="fa-solid fa-rotate-right"></i>
                 </button>
@@ -122,11 +119,11 @@
             <div class="relative overflow-hidden bg-gradient-to-br from-teal-500 via-emerald-600 to-teal-700 text-white rounded-3xl p-6 sm:p-10 shadow-xl shadow-teal-500/10">
                 <div class="relative z-10 max-w-2xl space-y-4">
                     <span class="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-teal-100">
-                        <i class="fa-solid fa-graduation-cap"></i> Módulos Interactivos de Alto Nivel
+                        <i class="fa-solid fa-graduation-cap"></i> Módulos Interactivos Clínicos
                     </span>
-                    <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight">Comprender la Diabetes con rigor clínico</h2>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight">Comprender la Diabetes con rigor y precisión</h2>
                     <p class="text-teal-50 text-sm sm:text-base leading-relaxed">
-                        Completa cada módulo secuencialmente. Acumula puntos de alto valor superando desafíos farmacológicos, nutricionales y metabólicos avanzados.
+                        Completa los módulos secuencialmente. Supera desafíos complejos con elementos trampa y analiza tus selecciones en tiempo real.
                     </p>
                     <div class="pt-2 flex flex-wrap gap-3">
                         <button onclick="startQuizModule()" class="btn-interact bg-white text-teal-700 font-bold px-6 py-3 rounded-2xl shadow-lg flex items-center gap-2 hover:bg-teal-50">
@@ -150,7 +147,7 @@
                         </div>
                         <h3 class="text-xl font-bold text-slate-800">1. Cuestionario Clínico Avanzado</h3>
                         <p class="text-slate-600 text-sm">
-                            Responde preguntas profundas sobre farmacología, picos glucémicos y manejo endocrino complejo. (+2,500 pts)
+                            Responde preguntas profundas sobre farmacología, picos glucémicos y endocrinología. (+5,000 pts)
                         </p>
                     </div>
                     <button id="btn-mod-quiz" onclick="startQuizModule()" class="btn-interact mt-6 w-full py-2.5 px-4 bg-teal-50 hover:bg-teal-100 text-teal-700 font-bold rounded-xl text-sm flex items-center justify-center gap-2">
@@ -167,9 +164,9 @@
                             </div>
                             <span id="badge-status-plate" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-200 text-slate-500">Bloqueado</span>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-800">2. Plato Nutricional</h3>
+                        <h3 class="text-xl font-bold text-slate-800">2. Simulador de Plato Clínico</h3>
                         <p class="text-slate-600 text-sm">
-                            Arma un menú equilibrado distribuyendo adecuadamente vegetales, proteínas y carbohidratos complejos. (+2,000 pts)
+                            Arma un plato combinando opciones sanas y evitando trampas procesadas o azucaradas. Gráfico de análisis incluido. (+5,000 pts)
                         </p>
                     </div>
                     <button id="btn-mod-plate" onclick="tryOpenModule('plate')" disabled class="mt-6 w-full py-2.5 px-4 bg-slate-100 text-slate-400 font-bold rounded-xl text-sm flex items-center justify-center gap-2 cursor-not-allowed">
@@ -177,7 +174,7 @@
                     </button>
                 </div>
 
-                <!-- Module 3: Guide & Myths -->
+                <!-- Module 3: Guide & Myths Multiple Choice -->
                 <div id="card-guide" class="glass-card rounded-2xl p-6 border border-slate-200 transition duration-300 flex flex-col justify-between opacity-60">
                     <div class="space-y-4">
                         <div class="flex items-center justify-between">
@@ -186,9 +183,9 @@
                             </div>
                             <span id="badge-status-guide" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-200 text-slate-500">Bloqueado</span>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-800">3. Guía y Mitos</h3>
+                        <h3 class="text-xl font-bold text-slate-800">3. Desafío de Mitos y Realidades</h3>
                         <p class="text-slate-600 text-sm">
-                            Resuelve dudas sobre mitos habituales, síntomas de alerta y consejos esenciales para el día a día. (+1,500 pts)
+                            Resuelve un test interactivo complejo destapando mitos clínicos frecuentes mediante selección múltiple. (+5,000 pts)
                         </p>
                     </div>
                     <button id="btn-mod-guide" onclick="tryOpenModule('guide')" disabled class="mt-6 w-full py-2.5 px-4 bg-slate-100 text-slate-400 font-bold rounded-xl text-sm flex items-center justify-center gap-2 cursor-not-allowed">
@@ -232,7 +229,7 @@
                         Farmacología y Metabolismo
                     </span>
                     <span id="question-points" class="text-xs font-extrabold text-amber-600 bg-amber-50 px-3 py-1 rounded-md border border-amber-200">
-                        +500 pts
+                        +1,000 pts
                     </span>
                 </div>
 
@@ -257,130 +254,142 @@
         </section>
 
         <!-- PLATE SIMULATOR VIEW -->
-        <section id="view-plate" class="hidden space-y-6 max-w-4xl mx-auto">
+        <section id="view-plate" class="hidden space-y-6 max-w-5xl mx-auto">
             <div class="flex items-center justify-between">
                 <button onclick="navigateTo('home')" class="text-slate-500 hover:text-slate-800 text-sm font-semibold flex items-center gap-1.5">
                     <i class="fa-solid fa-arrow-left"></i> Volver al Menú
                 </button>
                 <div class="flex items-center gap-3">
-                    <button onclick="autoCompletePlate()" class="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold px-3 py-1 rounded-lg border border-emerald-200 transition flex items-center gap-1">
-                        <i class="fa-solid fa-bolt"></i> Autocompletar Plato
-                    </button>
-                    <span class="text-xs font-extrabold text-amber-600 bg-amber-50 px-3 py-1 rounded-md border border-amber-200">+2,000 pts</span>
+                    <span class="text-xs font-extrabold text-amber-600 bg-amber-50 px-3 py-1 rounded-md border border-amber-200">+5,000 pts</span>
                 </div>
             </div>
 
             <p class="text-slate-600 text-sm leading-relaxed">
-                Un plato equilibrado ayuda a mantener niveles estables de glucosa. El método del plato recomienda:
+                Diseña el plato clínico combinando adecuadamente:
                 <span class="font-bold text-emerald-600">50% Vegetales</span>,
                 <span class="font-bold text-sky-600">25% Proteínas</span> y
                 <span class="font-bold text-amber-600">25% Carbohidratos Complejos</span>.
+                <span class="text-rose-600 font-semibold block mt-1"><i class="fa-solid fa-triangle-exclamation"></i> ¡Cuidado! Hay múltiples alimentos trampa (fritos, azucarados o refinados) diseñados para desequilibrar tus niveles de glucosa.</span>
             </p>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                <!-- Plate Visual -->
-                <div class="relative w-64 h-64 sm:w-80 sm:h-80 mx-auto bg-white rounded-full border-8 border-slate-200 shadow-inner flex flex-col justify-between overflow-hidden">
-                    <div id="plate-veg" class="h-1/2 bg-emerald-50 border-b-2 border-slate-200 flex flex-col items-center justify-center p-2 text-center transition">
-                        <i class="fa-solid fa-carrot text-2xl text-emerald-500 mb-1"></i>
-                        <span class="text-xs font-bold text-emerald-800">50% Verduras & Vegetales</span>
-                        <span id="selected-veg" class="text-xs text-emerald-600 font-medium">Vacío</span>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                <!-- Food Selection Panel (Multiple Options + Traps) -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+                    <h3 class="font-bold text-slate-800 text-base uppercase tracking-wide border-b pb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-utensils text-teal-600"></i> Banco Amplio de Alimentos y Trampas
+                    </h3>
+
+                    <!-- 1. Vegetable section -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-extrabold text-emerald-700 uppercase tracking-wider block">1. Seleccionar Vegetal / Ensalada (Ideal: 50%)</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="list-veg">
+                            <!-- Populated by JS -->
+                        </div>
                     </div>
 
-                    <div class="h-1/2 flex">
-                        <div id="plate-prot" class="w-1/2 bg-sky-50 border-r-2 border-slate-200 flex flex-col items-center justify-center p-2 text-center transition">
-                            <i class="fa-solid fa-drumstick-bite text-2xl text-sky-500 mb-1"></i>
-                            <span class="text-xs font-bold text-sky-800">25% Proteína</span>
-                            <span id="selected-prot" class="text-xs text-sky-600 font-medium">Vacío</span>
-                        </div>
-                        <div id="plate-carb" class="w-1/2 bg-amber-50 flex flex-col items-center justify-center p-2 text-center transition">
-                            <i class="fa-solid fa-bowl-rice text-2xl text-amber-500 mb-1"></i>
-                            <span class="text-xs font-bold text-amber-800">25% Carbohidrato</span>
-                            <span id="selected-carb" class="text-xs text-amber-600 font-medium">Vacío</span>
+                    <!-- 2. Protein section -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-extrabold text-sky-700 uppercase tracking-wider block">2. Seleccionar Proteína (Ideal: 25%)</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="list-prot">
+                            <!-- Populated by JS -->
                         </div>
                     </div>
+
+                    <!-- 3. Carbohydrate section -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-extrabold text-amber-700 uppercase tracking-wider block">3. Seleccionar Carbohidrato (Ideal: 25%)</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="list-carb">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <button onclick="evalPlateAdvanced()" class="btn-interact w-full py-3.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl text-base shadow-lg">
+                        <i class="fa-solid fa-chart-pie mr-2"></i> Evaluar Plato y Generar Gráfico Clínico
+                    </button>
                 </div>
 
-                <!-- Food Selection -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                    <h3 class="font-bold text-slate-800 text-sm uppercase tracking-wide border-b pb-2">Selecciona Alimentos:</h3>
-
-                    <div>
-                        <label class="text-xs font-bold text-emerald-700 block mb-1">1. Elegir Vegetal (50%)</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="setFood('veg', 'Espinacas y Brócoli')" class="text-xs p-2 bg-slate-50 hover:bg-emerald-50 rounded-lg border border-slate-200 text-left">🥦 Brócoli y Espinacas</button>
-                            <button onclick="setFood('veg', 'Ensalada Mixta')" class="text-xs p-2 bg-slate-50 hover:bg-emerald-50 rounded-lg border border-slate-200 text-left">🥗 Ensalada Mixta</button>
+                <!-- Plate Status & Chart Breakdown -->
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                        <h3 class="font-bold text-slate-800 text-base border-b pb-2">Tu Selección Actual:</h3>
+                        <div class="space-y-3 text-xs">
+                            <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                                <span class="font-bold text-emerald-800 block mb-0.5">Vegetal (50%):</span>
+                                <span id="current-sel-veg" class="text-emerald-700 italic">Ninguno seleccionado</span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-sky-50 border border-sky-200">
+                                <span class="font-bold text-sky-800 block mb-0.5">Proteína (25%):</span>
+                                <span id="current-sel-prot" class="text-sky-700 italic">Ninguno seleccionado</span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-amber-50 border border-amber-200">
+                                <span class="font-bold text-amber-800 block mb-0.5">Carbohidrato (25%):</span>
+                                <span id="current-sel-carb" class="text-amber-700 italic">Ninguno seleccionado</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div>
-                        <label class="text-xs font-bold text-sky-700 block mb-1">2. Elegir Proteína (25%)</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="setFood('prot', 'Pechuga a la Plancha')" class="text-xs p-2 bg-slate-50 hover:bg-sky-50 rounded-lg border border-slate-200 text-left">🍗 Pechuga de Pollo</button>
-                            <button onclick="setFood('prot', 'Pescado Horneado')" class="text-xs p-2 bg-slate-50 hover:bg-sky-50 rounded-lg border border-slate-200 text-left">🐟 Pescado de Mar</button>
+                    <!-- Evaluation Graph & Result Box -->
+                    <div id="plate-feedback-card" class="hidden bg-white p-6 rounded-3xl border border-slate-200 shadow-xl space-y-4">
+                        <h4 class="font-extrabold text-slate-800 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-square-poll-vertical text-teal-600"></i> Análisis Gráfico y Clínico
+                        </h4>
+                        <div id="plate-chart-container" class="space-y-3">
+                            <!-- Graph Bars rendered here -->
                         </div>
+                        <div id="plate-result-msg" class="p-4 rounded-2xl text-xs leading-relaxed border"></div>
+                        <button id="plate-next-btn" onclick="finishPlateModule()" class="hidden btn-interact w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow">
+                            Aprobar Módulo <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
                     </div>
-
-                    <div>
-                        <label class="text-xs font-bold text-amber-700 block mb-1">3. Elegir Carbohidrato Complejo (25%)</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="setFood('carb', 'Arroz Integral')" class="text-xs p-2 bg-slate-50 hover:bg-amber-50 rounded-lg border border-slate-200 text-left">🌾 Arroz Integral</button>
-                            <button onclick="setFood('carb', 'Camote al Horno')" class="text-xs p-2 bg-slate-50 hover:bg-amber-50 rounded-lg border border-slate-200 text-left">🍠 Camote al Horno</button>
-                        </div>
-                    </div>
-
-                    <button onclick="evalPlate()" class="btn-interact w-full mt-4 py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl text-sm shadow">
-                        <i class="fa-solid fa-circle-check"></i> Evaluar Plato
-                    </button>
                 </div>
             </div>
         </section>
 
-        <!-- GUIDE VIEW -->
-        <section id="view-guide" class="hidden space-y-6 max-w-4xl mx-auto">
-            <div class="flex items-center justify-between">
+        <!-- MYTHS MULTIPLE CHOICE VIEW -->
+        <section id="view-guide" class="hidden space-y-6 max-w-3xl mx-auto">
+            <div class="flex items-center justify-between gap-4">
                 <button onclick="navigateTo('home')" class="text-slate-500 hover:text-slate-800 text-sm font-semibold flex items-center gap-1.5">
                     <i class="fa-solid fa-arrow-left"></i> Volver al Menú
                 </button>
-                <span class="text-xs font-extrabold text-amber-600 bg-amber-50 px-3 py-1 rounded-md border border-amber-200">+1,500 pts</span>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Key Concepts -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                    <h3 class="font-bold text-teal-700 text-lg flex items-center gap-2">
-                        <i class="fa-solid fa-lightbulb"></i> Conceptos Fundamentales
-                    </h3>
-                    <div class="space-y-3 text-sm">
-                        <div class="p-3 bg-slate-50 rounded-xl">
-                            <h4 class="font-bold text-slate-800">¿Qué es la Glucosa?</h4>
-                            <p class="text-slate-600 text-xs mt-1">Es la principal fuente de energía de nuestro cuerpo, derivada de los alimentos que consumimos.</p>
-                        </div>
-                        <div class="p-3 bg-slate-50 rounded-xl">
-                            <h4 class="font-bold text-slate-800">¿Qué hace la Insulina?</h4>
-                            <p class="text-slate-600 text-xs mt-1">Es una hormona producida por el páncreas que permite que la glucosa ingrese a las células.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Myths & Realities -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                    <h3 class="font-bold text-indigo-700 text-lg flex items-center gap-2">
-                        <i class="fa-solid fa-shield-halved"></i> Mitos vs. Realidades
-                    </h3>
-                    <div class="space-y-3 text-sm">
-                        <div class="p-3 bg-rose-50 rounded-xl border border-rose-100">
-                            <span class="text-xs font-bold text-rose-700 uppercase">Mito:</span>
-                            <p class="text-slate-800 font-semibold text-xs mt-0.5">"Las personas con diabetes no pueden comer fruta."</p>
-                            <p class="text-slate-600 text-xs mt-1"><strong>Realidad:</strong> Las frutas aportan vitaminas y fibra. Se recomienda controlar porciones e índice glucémico.</p>
-                        </div>
-                    </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="autoCompleteMyth()" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-3 py-1 rounded-lg border border-indigo-200 transition flex items-center gap-1" title="Completar desafío automáticamente">
+                        <i class="fa-solid fa-bolt"></i> Autocompletar Pregunta
+                    </button>
+                    <span id="myth-progress-text" class="text-xs font-bold text-slate-600">Pregunta 1 de 4</span>
                 </div>
             </div>
 
-            <div class="text-center pt-4">
-                <button onclick="completeModule('guide')" class="btn-interact bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-3 rounded-xl shadow-lg">
-                    <i class="fa-solid fa-circle-check"></i> Finalizar Módulo 3 y Completar Aventura
-                </button>
+            <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                <div id="myth-progress-bar" class="bg-indigo-500 h-full transition-all duration-300 w-0"></div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl space-y-6">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full uppercase tracking-wider">
+                        Desafío de Mitos y Realidades
+                    </span>
+                    <span class="text-xs font-extrabold text-amber-600 bg-amber-50 px-3 py-1 rounded-md border border-amber-200">
+                        +1,250 pts c/u
+                    </span>
+                </div>
+
+                <h3 id="myth-title" class="text-lg sm:text-2xl font-bold text-slate-800 leading-snug">
+                    Cargando afirmación...
+                </h3>
+
+                <div id="myth-options-container" class="space-y-3">
+                    <!-- Multiple choice options -->
+                </div>
+
+                <div id="myth-feedback-box" class="hidden p-4 rounded-2xl text-sm leading-relaxed border transition-all">
+                    <!-- Feedback -->
+                </div>
+
+                <div class="flex justify-end pt-2">
+                    <button id="myth-next-btn" onclick="nextMythQuestion()" class="hidden btn-interact bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-xl shadow-md flex items-center gap-2">
+                        Siguiente <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -395,13 +404,14 @@
                 plate: { completed: false, unlocked: false },
                 guide: { completed: false, unlocked: false }
             },
-            currentQuestionIdx: 0
+            currentQuestionIdx: 0,
+            currentMythIdx: 0
         };
 
         const quizData = [
             {
                 category: "Farmacología y Metabolismo Celular",
-                points: 500,
+                points: 1000,
                 question: "¿Cuál es el mecanismo de acción predominante de la Metformina en pacientes con diabetes tipo 2 a nivel hepático y muscular?",
                 options: [
                     "Estimula directamente la secreción basal de insulina exógena en las células beta del páncreas.",
@@ -413,7 +423,7 @@
             },
             {
                 category: "Nutrición y Bioquímica Avanzada",
-                points: 500,
+                points: 1000,
                 question: "¿Por qué el índice glucémico (IG) por sí solo puede ser engañoso al calcular la dosis exacta de insulina postprandial?",
                 options: [
                     "Porque solo mide la velocidad a la que los carbohidratos elevan la glucemia, mas no la cantidad total (Carga Glucémica).",
@@ -425,7 +435,7 @@
             },
             {
                 category: "Fisiología y Cetogénesis",
-                points: 500,
+                points: 1000,
                 question: "¿Qué desencadena la producción patológica de cuerpos cetónicos en sangre cuando existe deficiencia absoluta de insulina?",
                 options: [
                     "El exceso de hidratación y consumo de agua mineral con electrolitos.",
@@ -437,7 +447,7 @@
             },
             {
                 category: "Endocrinología Clínica",
-                points: 500,
+                points: 1000,
                 question: "¿Cuál es el propósito fisiológico del 'Fenómeno del Alba' observado durante las primeras horas de la mañana?",
                 options: [
                     "Una caída repentina de la frecuencia cardíaca durante la madrugada.",
@@ -449,7 +459,7 @@
             },
             {
                 category: "Monitoreo y Prevención de Urgencias",
-                points: 500,
+                points: 1000,
                 question: "En una hipoglucemia leve a moderada en paciente consciente, ¿por qué se prefiere la regla de los 15-20 con carbohidratos simples?",
                 options: [
                     "Porque elevan la glucemia con seguridad sin provocar rebotes hiperglucémicos extremos posteriores.",
@@ -461,6 +471,75 @@
             }
         ];
 
+        const mythsData = [
+            {
+                question: "Afirmación: \"Las personas con diabetes no pueden comer ningún tipo de fruta porque contienen azúcar natural (fructosa).\"",
+                options: [
+                    "Verdadero (Es un hecho clínico comprobado)",
+                    "Falso (Es un mito; las frutas aportan fibra, vitaminas y minerales controlando porciones)"
+                ],
+                correct: 1,
+                explanation: "¡Correcto! Las frutas forman parte de una dieta equilibrada; el secreto radica en seleccionar frutas de menor carga glucémica y controlar porciones."
+            },
+            {
+                question: "Afirmación: \"La diabetes tipo 2 ocurre únicamente en personas con obesidad severa y mala condición física.\"",
+                options: [
+                    "Verdadero (La obesidad es el único factor causal existente)",
+                    "Falso (Existen múltiples factores genéticos, antecedentes familiares y resistencia a la insulina por edad o genética)"
+                ],
+                correct: 1,
+                explanation: "¡Excelente! Aunque el sobrepeso es un factor de riesgo importante, la genética y la historia familiar juegan un rol determinante."
+            },
+            {
+                question: "Afirmación: \"Hacer ejercicio intenso siempre disminuye los niveles de glucosa en sangre de manera inmediata en todos los casos.\"",
+                options: [
+                    "Falso (El ejercicio anaeróbico intenso puede liberar hormonas de estrés que eleven temporalmente la glucosa)",
+                    "Verdadero (Baja la glucosa siempre sin excepción en cualquier circunstancia)"
+                ],
+                correct: 0,
+                explanation: "¡Muy bien! El ejercicio de alta intensidad o fuerza puede provocar picos transitorios por la adrenalina y el cortisol."
+            },
+            {
+                question: "Afirmación: \"Los productos etiquetados como 'sin azúcar añadida' son libres de carbohidratos y seguros para consumirse sin control.\"",
+                options: [
+                    "Verdadero (No afectan en absoluto la glucemia)",
+                    "Falso (Pueden contener harinas refinadas u otros carbohidratos que impactan los niveles de glucosa)"
+                ],
+                correct: 1,
+                explanation: "¡Perfecto! 'Sin azúcar añadida' no significa libre de carbohidratos totales. Es fundamental revisar siempre la etiqueta nutricional."
+            }
+        ];
+
+        // Expanded Food Options with Confusion/Trap items
+        const plateOptions = {
+            veg: [
+                { id: 'v1', name: '🥦 Brócoli y Espinacas al Vapor', healthy: true },
+                { id: 'v2', name: '🥗 Ensalada Mixta Fresca de Hojas Verdes', healthy: true },
+                { id: 'v3', name: '🥒 Ensalada de Pepino y Apio con Aderezo Cremoso', healthy: true },
+                { id: 'v4', name: '🍟 Papas Fritas de Bolsa (Procesadas)', healthy: false, trap: 'Alto contenido de sodio y grasas trans transitorias' },
+                { id: 'v5', name: '🌽 Choclo enlatado con jarabe de maíz', healthy: false, trap: 'Elevada carga glucémica y azúcares añadidos' },
+                { id: 'v6', name: '🧅 Aitos fritos rebosados', healthy: false, trap: 'Harinas refinadas y fritura profunda' }
+            ],
+            prot: [
+                { id: 'p1', name: '🍗 Pechuga de Pollo a la Plancha', healthy: true },
+                { id: 'p2', name: '🐟 Pescado Blanco al Horno', healthy: true },
+                { id: 'p3', name: '🥩 Bife Magro a la Parrilla', healthy: true },
+                { id: 'p4', name: '🥓 Tocino Frito Ahumado', healthy: false, trap: 'Exceso de grasas saturadas inflamatorias' },
+                { id: 'p5', name: '🌭 Salchicha Procesada de Viena', healthy: false, trap: 'Altamente procesado y sodio elevado' },
+                { id: 'p6', name: '🧀 Nuggets de Pollo Empanizados Fritos', healthy: false, trap: 'Rebozado de harina y fritura industrial' }
+            ],
+            carb: [
+                { id: 'c1', name: '🌾 Arroz Integral de Grano Entero', healthy: true },
+                { id: 'c2', name: '🍠 Camote (Batata) Asado', healthy: true },
+                { id: 'c3', name: '🥔 Quinoa Hervida con Especias', healthy: true },
+                { id: 'c4', name: '🍩 Dona Glaseada Azucarada', healthy: false, trap: 'Pico hiperglucémico inmediato severo' },
+                { id: 'c5', name: '🥤 Refresco Azucarado Regular', healthy: false, trap: 'Azúcar líquida de rápida absorción hepática' },
+                { id: 'c6', name: '🍞 Pan Blanco Refinado de Molde', healthy: false, trap: 'Carbohidrato simple de alto índice glucémico' }
+            ]
+        };
+
+        let selectedPlateAdvanced = { veg: null, prot: null, carb: null };
+
         function loadState() {
             const saved = localStorage.getItem('glucoguide_state');
             if (saved) {
@@ -471,6 +550,7 @@
                 }
             }
             updateUI();
+            renderPlateChoices();
         }
 
         function saveState() {
@@ -480,12 +560,8 @@
 
         function updateUI() {
             document.getElementById('score-display').textContent = `${gameState.score.toLocaleString()} pts`;
-
-            // Update Quiz Card
             updateCardStatus('quiz', gameState.modules.quiz);
-            // Update Plate Card
             updateCardStatus('plate', gameState.modules.plate);
-            // Update Guide Card
             updateCardStatus('guide', gameState.modules.guide);
         }
 
@@ -509,12 +585,12 @@
                 card.classList.remove('opacity-60');
                 badge.textContent = 'Disponible';
                 badge.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-teal-100 text-teal-700';
-                btn.textContent = modName === 'quiz' ? 'Jugar Ahora' : (modName === 'plate' ? 'Armar Plato' : 'Consultar Guía');
+                btn.textContent = modName === 'quiz' ? 'Jugar Ahora' : (modName === 'plate' ? 'Armar Plato' : 'Desafío de Mitos');
                 btn.disabled = false;
                 btn.className = `btn-interact mt-6 w-full py-2.5 px-4 bg-${modName === 'plate' ? 'emerald' : modName === 'guide' ? 'indigo' : 'teal'}-50 hover:bg-${modName === 'plate' ? 'emerald' : modName === 'guide' ? 'indigo' : 'teal'}-100 text-${modName === 'plate' ? 'emerald' : modName === 'guide' ? 'indigo' : 'teal'}-700 font-bold rounded-xl text-sm flex items-center justify-center gap-2`;
                 if (modName !== 'quiz') {
                     const lockIcon = document.getElementById(`lock-icon-${modName}`);
-                    if (lockIcon) lockIcon.className = `fa-solid ${modName === 'plate' ? 'fa-plate-wheat' : 'fa-book-medical'} text-${modName === 'plate' ? 'emerald' : 'indigo'}-600`;
+                    if (lockIcon) lockIcon.className = `fa-solid ${modName === 'plate' ? 'fa-plate-wheat' : 'fa-shield-halved'} text-${modName === 'plate' ? 'emerald' : 'indigo'}-600`;
                 }
             } else {
                 card.classList.add('opacity-60');
@@ -534,9 +610,9 @@
             container.innerHTML = '';
 
             const badgesList = [
-                { id: 'quiz', name: 'Experto Clínico', desc: 'Trivia avanzada superada (+2,500 pts)', completed: gameState.modules.quiz.completed, icon: 'fa-brain' },
-                { id: 'plate', name: 'Chef Saludable', desc: 'Plato balanceado creado (+2,000 pts)', completed: gameState.modules.plate.completed, icon: 'fa-utensils' },
-                { id: 'guide', name: 'Explorador GlucoGuide', desc: 'Guía y mitos dominados (+1,500 pts)', completed: gameState.modules.guide.completed, icon: 'fa-award' }
+                { id: 'quiz', name: 'Experto Clínico', desc: 'Trivia avanzada superada (+5,000 pts)', completed: gameState.modules.quiz.completed, icon: 'fa-brain' },
+                { id: 'plate', name: 'Nutricionista Clínico', desc: 'Plato avanzado analizado (+5,000 pts)', completed: gameState.modules.plate.completed, icon: 'fa-utensils' },
+                { id: 'guide', name: 'Analista de Mitos', desc: 'Desafío múltiple dominado (+5,000 pts)', completed: gameState.modules.guide.completed, icon: 'fa-shield-halved' }
             ];
 
             badgesList.forEach(b => {
@@ -573,6 +649,11 @@
                 if (modName === 'quiz') {
                     gameState.currentQuestionIdx = 0;
                     loadQuestion();
+                } else if (modName === 'guide') {
+                    gameState.currentMythIdx = 0;
+                    loadMythQuestion();
+                } else if (modName === 'plate') {
+                    resetPlateSelectionUI();
                 }
             } else {
                 alertBox('Módulo Bloqueado', 'Debes completar el módulo anterior para desbloquear esta sección.');
@@ -583,6 +664,7 @@
             tryOpenModule('quiz');
         }
 
+        // --- QUIZ LOGIC ---
         function loadQuestion() {
             const q = quizData[gameState.currentQuestionIdx];
             document.getElementById('question-category').textContent = q.category;
@@ -660,53 +742,200 @@
             selectOption(q.correct);
         }
 
-        function autoCompleteAllModules() {
-            gameState.score += 15000;
-            gameState.modules.quiz.completed = true;
-            gameState.modules.plate.unlocked = true;
-            gameState.modules.plate.completed = true;
-            gameState.modules.guide.unlocked = true;
-            gameState.modules.guide.completed = true;
-            saveState();
-            if (typeof confetti === 'function') {
-                confetti({ particleCount: 100, spread: 100, origin: { y: 0.5 } });
+        // --- PLATE SIMULATOR ADVANCED LOGIC ---
+        function renderPlateChoices() {
+            renderCategoryChoices('veg', plateOptions.veg);
+            renderCategoryChoices('prot', plateOptions.prot);
+            renderCategoryChoices('carb', plateOptions.carb);
+        }
+
+        function renderCategoryChoices(cat, items) {
+            const container = document.getElementById(`list-${cat}`);
+            if (!container) return;
+            container.innerHTML = '';
+
+            items.forEach(item => {
+                const btn = document.createElement('button');
+                btn.id = `food-btn-${cat}-${item.id}`;
+                btn.className = "text-xs p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-800 text-left font-medium transition flex items-center justify-between btn-interact";
+                btn.onclick = () => selectPlateItem(cat, item);
+                btn.innerHTML = `
+                    <span>${item.name}</span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded ${item.healthy ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">${item.healthy ? 'Sano' : 'Trampa'}</span>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function selectPlateItem(cat, item) {
+            selectedPlateAdvanced[cat] = item;
+            document.getElementById(`current-sel-${cat}`).textContent = item.name;
+
+            // Highlight selected in UI
+            plateOptions[cat].forEach(opt => {
+                const b = document.getElementById(`food-btn-${cat}-${opt.id}`);
+                if (b) {
+                    if (opt.id === item.id) {
+                        b.className = "text-xs p-3 rounded-xl border-2 border-teal-500 bg-teal-50 text-teal-900 text-left font-bold transition flex items-center justify-between shadow-sm";
+                    } else {
+                        b.className = "text-xs p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-800 text-left font-medium transition flex items-center justify-between btn-interact opacity-70";
+                    }
+                }
+            });
+
+            document.getElementById('plate-feedback-card').classList.add('hidden');
+        }
+
+        function resetPlateSelectionUI() {
+            selectedPlateAdvanced = { veg: null, prot: null, carb: null };
+            document.getElementById('current-sel-veg').textContent = "Ninguno seleccionado";
+            document.getElementById('current-sel-prot').textContent = "Ninguno seleccionado";
+            document.getElementById('current-sel-carb').textContent = "Ninguno seleccionado";
+            document.getElementById('plate-feedback-card').classList.add('hidden');
+            renderPlateChoices();
+        }
+
+        function evalPlateAdvanced() {
+            if (!selectedPlateAdvanced.veg || !selectedPlateAdvanced.prot || !selectedPlateAdvanced.carb) {
+                alertBox('Selección Incompleta', 'Por favor selecciona una opción en cada categoría (Vegetal, Proteína y Carbohidrato) antes de evaluar.');
+                return;
             }
-            alertBox('¡Autocompletado con éxito!', 'Todos los módulos han sido marcados como completados para prueba rápida con máxima puntuación.');
-            navigateTo('home');
-        }
 
-        // Balanced Plate Simulator Logic
-        let selectedPlate = { veg: null, prot: null, carb: null };
+            const feedbackCard = document.getElementById('plate-feedback-card');
+            feedbackCard.classList.remove('hidden');
 
-        function setFood(category, name) {
-            selectedPlate[category] = name;
-            document.getElementById(`selected-${category}`).textContent = name;
-        }
+            const chartContainer = document.getElementById('plate-chart-container');
+            chartContainer.innerHTML = '';
 
-        function autoCompletePlate() {
-            selectedPlate = { veg: 'Espinacas y Brócoli', prot: 'Pechuga a la Plancha', carb: 'Arroz Integral' };
-            document.getElementById('selected-veg').textContent = selectedPlate.veg;
-            document.getElementById('selected-prot').textContent = selectedPlate.prot;
-            document.getElementById('selected-carb').textContent = selectedPlate.carb;
-            evalPlate();
-        }
+            let healthyCount = 0;
+            if (selectedPlateAdvanced.veg.healthy) healthyCount++;
+            if (selectedPlateAdvanced.prot.healthy) healthyCount++;
+            if (selectedPlateAdvanced.carb.healthy) healthyCount++;
 
-        function evalPlate() {
-            if (selectedPlate.veg && selectedPlate.prot && selectedPlate.carb) {
-                gameState.score += 2000;
+            // Build visual percentage/score bar breakdown
+            const breakdown = [
+                { label: 'Vegetales (50% objetivo)', item: selectedPlateAdvanced.veg },
+                { label: 'Proteínas (25% objetivo)', item: selectedPlateAdvanced.prot },
+                { label: 'Carbohidratos (25% objetivo)', item: selectedPlateAdvanced.carb }
+            ];
+
+            breakdown.forEach(b => {
+                const row = document.createElement('div');
+                row.className = "space-y-1";
+                row.innerHTML = `
+                    <div class="flex justify-between text-[11px] font-bold">
+                        <span class="text-slate-700">${b.label}</span>
+                        <span class="${b.item.healthy ? 'text-emerald-600' : 'text-rose-600'}">${b.item.healthy ? 'Nutritivo (Aprobado)' : '¡Alerta Trampa!'}</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden border border-slate-200">
+                        <div class="${b.item.healthy ? 'bg-emerald-500' : 'bg-rose-500'} h-full w-full"></div>
+                    </div>
+                    <p class="text-[10px] text-slate-500 italic">${b.item.name} ${b.item.trap ? '— ⚠️ ' + b.item.trap : ''}</p>
+                `;
+                chartContainer.appendChild(row);
+            });
+
+            const resultMsg = document.getElementById('plate-result-msg');
+            const nextBtn = document.getElementById('plate-next-btn');
+
+            if (healthyCount === 3) {
+                gameState.score += 5000;
+                resultMsg.className = "p-4 rounded-2xl text-xs leading-relaxed border bg-emerald-50 border-emerald-200 text-emerald-900";
+                resultMsg.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5 font-bold"></i> <strong>¡Excelente Análisis Clínico!</strong> Has seleccionado únicamente opciones nutritivas y balanceadas. Tu plato mantiene la estabilidad glucémica óptima. (+5,000 pts)`;
+                nextBtn.classList.remove('hidden');
                 if (typeof confetti === 'function') {
                     confetti({ particleCount: 70, spread: 80, origin: { y: 0.6 } });
                 }
-                completeModule('plate');
             } else {
-                alertBox('Plato Incompleto', 'Por favor elige un alimento para cada una de las 3 partes del plato.');
+                resultMsg.className = "p-4 rounded-2xl text-xs leading-relaxed border bg-rose-50 border-rose-200 text-rose-900";
+                resultMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-600 mr-1.5 font-bold"></i> <strong>¡Plato Desequilibrado o con Alimentos Trampa!</strong> Incluiste ${3 - healthyCount} opción(es) no saludable(s) que provocan picos glucémicos o inflamación metabólica. Revisa las advertencias rojas y vuelve a intentar.`;
+                nextBtn.classList.add('hidden');
             }
+        }
+
+        function finishPlateModule() {
+            completeModule('plate');
+        }
+
+        // --- MYTHS MULTIPLE CHOICE LOGIC ---
+        function loadMythQuestion() {
+            const m = mythsData[gameState.currentMythIdx];
+            document.getElementById('myth-title').textContent = m.question;
+
+            const progressPercent = ((gameState.currentMythIdx + 1) / mythsData.length) * 100;
+            document.getElementById('myth-progress-bar').style.width = `${progressPercent}%`;
+            document.getElementById('myth-progress-text').textContent = `Pregunta ${gameState.currentMythIdx + 1} de ${mythsData.length}`;
+
+            const container = document.getElementById('myth-options-container');
+            container.innerHTML = '';
+
+            m.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-xl border border-slate-200 hover:border-indigo-400 bg-slate-50 hover:bg-indigo-50 text-slate-800 text-sm font-medium transition flex items-center justify-between group btn-interact";
+                btn.onclick = () => selectMythOption(idx);
+                btn.innerHTML = `
+                    <span>${opt}</span>
+                    <i class="fa-regular fa-circle text-slate-300 group-hover:text-indigo-500"></i>
+                `;
+                container.appendChild(btn);
+            });
+
+            document.getElementById('myth-feedback-box').classList.add('hidden');
+            document.getElementById('myth-next-btn').classList.add('hidden');
+        }
+
+        function selectMythOption(selectedIdx) {
+            const m = mythsData[gameState.currentMythIdx];
+            const isCorrect = selectedIdx === m.correct;
+            const container = document.getElementById('myth-options-container');
+            const buttons = container.querySelectorAll('button');
+
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-indigo-50', 'hover:border-indigo-400');
+                if (idx === m.correct) {
+                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 text-sm font-semibold flex items-center justify-between";
+                } else if (idx === selectedIdx && !isCorrect) {
+                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-rose-400 bg-rose-50 text-rose-900 text-sm font-semibold flex items-center justify-between";
+                }
+            });
+
+            const fb = document.getElementById('myth-feedback-box');
+            fb.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-800', 'bg-rose-50', 'border-rose-200', 'text-rose-800');
+
+            if (isCorrect) {
+                gameState.score += 1250;
+                fb.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-800');
+                fb.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-2"></i> ${m.explanation}`;
+
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+                }
+            } else {
+                fb.classList.add('bg-rose-50', 'border-rose-200', 'text-rose-800');
+                fb.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 mr-2"></i> La respuesta correcta era: <strong>${m.options[m.correct]}</strong>`;
+            }
+
+            document.getElementById('myth-next-btn').classList.remove('hidden');
+        }
+
+        function nextMythQuestion() {
+            gameState.currentMythIdx++;
+            if (gameState.currentMythIdx < mythsData.length) {
+                loadMythQuestion();
+            } else {
+                completeModule('guide');
+            }
+        }
+
+        function autoCompleteMyth() {
+            const m = mythsData[gameState.currentMythIdx];
+            selectMythOption(m.correct);
         }
 
         function completeModule(modName) {
             gameState.modules[modName].completed = true;
 
-            // Unlock next module sequentially
             if (modName === 'quiz') {
                 gameState.modules.plate.unlocked = true;
             } else if (modName === 'plate') {
@@ -730,7 +959,8 @@
                         plate: { completed: false, unlocked: false },
                         guide: { completed: false, unlocked: false }
                     },
-                    currentQuestionIdx: 0
+                    currentQuestionIdx: 0,
+                    currentMythIdx: 0
                 };
                 saveState();
                 navigateTo('home');
