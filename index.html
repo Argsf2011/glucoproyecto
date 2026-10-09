@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlucoGuide</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .float-anim {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .btn-interact {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-interact:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+        }
+        .btn-interact:active {
+            transform: translateY(0px);
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col justify-between selection:bg-teal-100 selection:text-teal-900">
+
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+            <!-- Logo -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-emerald-400 flex items-center justify-center text-white shadow-md shadow-teal-500/20">
+                    <i class="fa-solid font-bold fa-heart-pulse text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg sm:text-xl text-slate-800 tracking-tight leading-none">Gluco<span class="text-teal-600">Guide</span></h1>
+                </div>
+            </div>
+
+            <!-- Stats & Quick Controls -->
+            <div class="flex items-center gap-2 sm:gap-4">
+                <div class="flex items-center gap-2 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-full text-amber-700 text-xs sm:text-sm font-semibold">
+                    <i class="fa-solid fa-star text-amber-500"></i>
+                    <span id="score-display">0 pts</span>
+                </div>
+                <button onclick="resetProgress()" class="text-xs text-slate-400 hover:text-rose-600 font-medium px-2 py-1 rounded transition" title="Reiniciar Progreso">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 flex-1 w-full">
+
+        <!-- HOME VIEW -->
+        <section id="view-home" class="space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden bg-gradient-to-br from-teal-500 via-emerald-600 to-teal-700 text-white rounded-3xl p-6 sm:p-10 shadow-xl shadow-teal-500/10">
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <span class="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-teal-100">
+                        <i class="fa-solid fa-graduation-cap"></i> Módulos Interactivos
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight">Comprender la Diabetes de forma interactiva</h2>
+                    <p class="text-teal-50 text-sm sm:text-base leading-relaxed">
+                        Completa cada módulo secuencialmente. Al finalizar una actividad se guardará tu progreso y se desbloqueará el siguiente desafío.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <button onclick="startQuizModule()" class="btn-interact bg-white text-teal-700 font-bold px-6 py-3 rounded-2xl shadow-lg flex items-center gap-2 hover:bg-teal-50">
+                            <i class="fa-solid fa-play"></i> Continuar Aventura
+                        </button>
+                    </div>
+                </div>
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+            </div>
+
+            <!-- Modules Grid with Lock/Unlock State -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Module 1: Quiz -->
+                <div id="card-quiz" class="glass-card rounded-2xl p-6 border border-slate-200 transition duration-300 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="w-12 h-12 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center text-xl font-bold">
+                                <i class="fa-solid fa-brain"></i>
+                            </div>
+                            <span id="badge-status-quiz" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Pendiente</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800">1. Cuestionario por Niveles</h3>
+                        <p class="text-slate-600 text-sm">
+                            Aprende sobre glucemia, hipoglucemia e insulina respondiendo preguntas con retroalimentación instantánea.
+                        </p>
+                    </div>
+                    <button id="btn-mod-quiz" onclick="startQuizModule()" class="btn-interact mt-6 w-full py-2.5 px-4 bg-teal-50 hover:bg-teal-100 text-teal-700 font-bold rounded-xl text-sm flex items-center justify-center gap-2">
+                        Jugar Ahora <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- Module 2: Plate Simulator -->
+                <div id="card-plate" class="glass-card rounded-2xl p-6 border border-slate-200 transition duration-300 flex flex-col justify-between opacity-60">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="w-12 h-12 rounded-xl bg-slate-200 text-slate-500 flex items-center justify-center text-xl font-bold" id="icon-plate">
+                                <i class="fa-solid fa-lock" id="lock-icon-plate"></i>
+                            </div>
+                            <span id="badge-status-plate" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-200 text-slate-500">Bloqueado</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800">2. Plato Nutricional</h3>
+                        <p class="text-slate-600 text-sm">
+                            Arma un menú equilibrado distribuyendo adecuadamente vegetales, proteínas y carbohidratos complejos.
+                        </p>
+                    </div>
+                    <button id="btn-mod-plate" onclick="tryOpenModule('plate')" disabled class="mt-6 w-full py-2.5 px-4 bg-slate-100 text-slate-400 font-bold rounded-xl text-sm flex items-center justify-center gap-2 cursor-not-allowed">
+                        Bloqueado <i class="fa-solid fa-lock text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- Module 3: Guide & Myths -->
+                <div id="card-guide" class="glass-card rounded-2xl p-6 border border-slate-200 transition duration-300 flex flex-col justify-between opacity-60">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="w-12 h-12 rounded-xl bg-slate-200 text-slate-500 flex items-center justify-center text-xl font-bold" id="icon-guide">
+                                <i class="fa-solid fa-lock" id="lock-icon-guide"></i>
+                            </div>
+                            <span id="badge-status-guide" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-200 text-slate-500">Bloqueado</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-800">3. Guía y Mitos</h3>
+                        <p class="text-slate-600 text-sm">
+                            Resuelve dudas sobre mitos habituales, síntomas de alerta y consejos esenciales para el día a día.
+                        </p>
+                    </div>
+                    <button id="btn-mod-guide" onclick="tryOpenModule('guide')" disabled class="mt-6 w-full py-2.5 px-4 bg-slate-100 text-slate-400 font-bold rounded-xl text-sm flex items-center justify-center gap-2 cursor-not-allowed">
+                        Bloqueado <i class="fa-solid fa-lock text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Badges Summary -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                <h3 class="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-award text-amber-500"></i> Tus Insignias de Progreso
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="badges-container">
+                    <!-- Badges rendered dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- QUIZ VIEW -->
+        <section id="view-quiz" class="hidden space-y-6 max-w-3xl mx-auto">
+            <div class="flex items-center justify-between gap-4">
+                <button onclick="navigateTo('home')" class="text-slate-500 hover:text-slate-800 text-sm font-semibold flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al Menú
+                </button>
+                <div class="flex items-center gap-2 text-xs font-bold text-slate-600">
+                    <span id="quiz-progress-text">Pregunta 1 de 3</span>
+                </div>
+            </div>
+
+            <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                <div id="quiz-progress-bar" class="bg-teal-500 h-full transition-all duration-300 w-0"></div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl space-y-6">
+                <div class="flex items-center justify-between">
+                    <span id="question-category" class="text-xs font-bold px-3 py-1 bg-teal-100 text-teal-800 rounded-full uppercase tracking-wider">
+                        Conceptos Básicos
+                    </span>
+                    <span id="question-points" class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200">
+                        +100 pts
+                    </span>
+                </div>
+
+                <h3 id="question-title" class="text-lg sm:text-2xl font-bold text-slate-800 leading-snug">
+                    Cargando pregunta...
+                </h3>
+
+                <div id="options-container" class="space-y-3">
+                    <!-- Options buttons -->
+                </div>
+
+                <div id="feedback-box" class="hidden p-4 rounded-2xl text-sm leading-relaxed border transition-all">
+                    <!-- Feedback text -->
+                </div>
+
+                <div class="flex justify-end pt-2">
+                    <button id="next-btn" onclick="nextQuestion()" class="hidden btn-interact bg-teal-600 hover:bg-teal-700 text-white font-bold px-6 py-3 rounded-xl shadow-md flex items-center gap-2">
+                        Siguiente <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PLATE SIMULATOR VIEW -->
+        <section id="view-plate" class="hidden space-y-6 max-w-4xl mx-auto">
+            <div class="flex items-center justify-between">
+                <button onclick="navigateTo('home')" class="text-slate-500 hover:text-slate-800 text-sm font-semibold flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al Menú
+                </button>
+                <h2 class="text-xl font-bold text-slate-800">Simulador de Plato Balanceado</h2>
+            </div>
+
+            <p class="text-slate-600 text-sm leading-relaxed">
+                Un plato equilibrado ayuda a mantener niveles estables de glucosa. El método del plato recomienda:
+                <span class="font-bold text-emerald-600">50% Vegetales</span>,
+                <span class="font-bold text-sky-600">25% Proteínas</span> y
+                <span class="font-bold text-amber-600">25% Carbohidratos Complejos</span>.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <!-- Plate Visual -->
+                <div class="relative w-64 h-64 sm:w-80 sm:h-80 mx-auto bg-white rounded-full border-8 border-slate-200 shadow-inner flex flex-col justify-between overflow-hidden">
+                    <div id="plate-veg" class="h-1/2 bg-emerald-50 border-b-2 border-slate-200 flex flex-col items-center justify-center p-2 text-center transition">
+                        <i class="fa-solid fa-carrot text-2xl text-emerald-500 mb-1"></i>
+                        <span class="text-xs font-bold text-emerald-800">50% Verduras & Vegetales</span>
+                        <span id="selected-veg" class="text-xs text-emerald-600 font-medium">Vacío</span>
+                    </div>
+
+                    <div class="h-1/2 flex">
+                        <div id="plate-prot" class="w-1/2 bg-sky-50 border-r-2 border-slate-200 flex flex-col items-center justify-center p-2 text-center transition">
+                            <i class="fa-solid fa-drumstick-bite text-2xl text-sky-500 mb-1"></i>
+                            <span class="text-xs font-bold text-sky-800">25% Proteína</span>
+                            <span id="selected-prot" class="text-xs text-sky-600 font-medium">Vacío</span>
+                        </div>
+                        <div id="plate-carb" class="w-1/2 bg-amber-50 flex flex-col items-center justify-center p-2 text-center transition">
+                            <i class="fa-solid fa-bowl-rice text-2xl text-amber-500 mb-1"></i>
+                            <span class="text-xs font-bold text-amber-800">25% Carbohidrato</span>
+                            <span id="selected-carb" class="text-xs text-amber-600 font-medium">Vacío</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food Selection -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-800 text-sm uppercase tracking-wide border-b pb-2">Selecciona Alimentos:</h3>
+
+                    <div>
+                        <label class="text-xs font-bold text-emerald-700 block mb-1">1. Elegir Vegetal (50%)</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="setFood('veg', 'Espinacas y Brócoli')" class="text-xs p-2 bg-slate-50 hover:bg-emerald-50 rounded-lg border border-slate-200 text-left">🥦 Brócoli y Espinacas</button>
+                            <button onclick="setFood('veg', 'Ensalada Mixta')" class="text-xs p-2 bg-slate-50 hover:bg-emerald-50 rounded-lg border border-slate-200 text-left">🥗 Ensalada Mixta</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-sky-700 block mb-1">2. Elegir Proteína (25%)</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="setFood('prot', 'Pechuga a la Plancha')" class="text-xs p-2 bg-slate-50 hover:bg-sky-50 rounded-lg border border-slate-200 text-left">🍗 Pechuga de Pollo</button>
+                            <button onclick="setFood('prot', 'Pescado Horneado')" class="text-xs p-2 bg-slate-50 hover:bg-sky-50 rounded-lg border border-slate-200 text-left">🐟 Pescado de Mar</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-amber-700 block mb-1">3. Elegir Carbohidrato Complejo (25%)</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="setFood('carb', 'Arroz Integral')" class="text-xs p-2 bg-slate-50 hover:bg-amber-50 rounded-lg border border-slate-200 text-left">🌾 Arroz Integral</button>
+                            <button onclick="setFood('carb', 'Camote al Horno')" class="text-xs p-2 bg-slate-50 hover:bg-amber-50 rounded-lg border border-slate-200 text-left">🍠 Camote al Horno</button>
+                        </div>
+                    </div>
+
+                    <button onclick="evalPlate()" class="btn-interact w-full mt-4 py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl text-sm shadow">
+                        <i class="fa-solid fa-circle-check"></i> Evaluar Plato
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- GUIDE VIEW -->
+        <section id="view-guide" class="hidden space-y-6 max-w-4xl mx-auto">
+            <div class="flex items-center justify-between">
+                <button onclick="navigateTo('home')" class="text-slate-500 hover:text-slate-800 text-sm font-semibold flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al Menú
+                </button>
+                <h2 class="text-xl font-bold text-slate-800">Guía de Conocimiento y Mitos</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Key Concepts -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="font-bold text-teal-700 text-lg flex items-center gap-2">
+                        <i class="fa-solid fa-lightbulb"></i> Conceptos Fundamentales
+                    </h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="p-3 bg-slate-50 rounded-xl">
+                            <h4 class="font-bold text-slate-800">¿Qué es la Glucosa?</h4>
+                            <p class="text-slate-600 text-xs mt-1">Es la principal fuente de energía de nuestro cuerpo, derivada de los alimentos que consumimos.</p>
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded-xl">
+                            <h4 class="font-bold text-slate-800">¿Qué hace la Insulina?</h4>
+                            <p class="text-slate-600 text-xs mt-1">Es una hormona producida por el páncreas que permite que la glucosa ingrese a las células.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Myths & Realities -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="font-bold text-indigo-700 text-lg flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved"></i> Mitos vs. Realidades
+                    </h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="p-3 bg-rose-50 rounded-xl border border-rose-100">
+                            <span class="text-xs font-bold text-rose-700 uppercase">Mito:</span>
+                            <p class="text-slate-800 font-semibold text-xs mt-0.5">"Las personas con diabetes no pueden comer fruta."</p>
+                            <p class="text-slate-600 text-xs mt-1"><strong>Realidad:</strong> Las frutas aportan vitaminas y fibra. Se recomienda controlar porciones.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center pt-4">
+                <button onclick="completeModule('guide')" class="btn-interact bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-3 rounded-xl shadow-lg">
+                    <i class="fa-solid fa-circle-check"></i> Finalizar Módulo 3 y Completar Aventura
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Game State & Persistence (localStorage)
+        let gameState = {
+            score: 0,
+            modules: {
+                quiz: { completed: false, unlocked: true },
+                plate: { completed: false, unlocked: false },
+                guide: { completed: false, unlocked: false }
+            },
+            currentQuestionIdx: 0
+        };
+
+        const quizData = [
+            {
+                category: "Conceptos Básicos",
+                points: 100,
+                question: "¿Cuál es la función principal de la insulina en el cuerpo humano?",
+                options: [
+                    "Permitir que la glucosa de la sangre entre a las células para producir energía",
+                    "Aumentar rápidamente el nivel de azúcar tras comer alimentos",
+                    "Ayudar únicamente en la digestión de grasas saturadas"
+                ],
+                correct: 0,
+                explanation: "¡Correcto! La insulina actúa como una 'llave' que abre las células para que la glucosa pueda entrar y suministrar energía."
+            },
+            {
+                category: "Alimentación",
+                points: 100,
+                question: "¿Qué tipo de carbohidratos ayuda a mantener estables los niveles de glucosa?",
+                options: [
+                    "Carbohidratos simples como golosinas y gaseosas",
+                    "Carbohidratos complejos ricos en fibra como verduras y cereales integrales",
+                    "Cualquier alimento rico en azúcares procesados"
+                ],
+                correct: 1,
+                explanation: "¡Excelente! La fibra de los carbohidratos complejos ralentiza la digestión y evita picos de glucosa."
+            },
+            {
+                category: "Atención y Síntomas",
+                points: 100,
+                question: "Si alguien siente temblor, sudoración fría y mareo, ¿qué condición se sospecha?",
+                options: [
+                    "Hiperglucemia (azúcar elevada)",
+                    "Hipoglucemia (azúcar baja)",
+                    "Falta de sueño"
+                ],
+                correct: 1,
+                explanation: "¡Muy bien! Son síntomas característicos de hipoglucemia. La acción inmediata recomendada es consumir azúcar de rápida absorción."
+            }
+        ];
+
+        function loadState() {
+            const saved = localStorage.getItem('glucoguide_state');
+            if (saved) {
+                try {
+                    gameState = JSON.parse(saved);
+                } catch (e) {
+                    console.error("Error al cargar estado", e);
+                }
+            }
+            updateUI();
+        }
+
+        function saveState() {
+            localStorage.setItem('glucoguide_state', JSON.stringify(gameState));
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('score-display').textContent = `${gameState.score} pts`;
+
+            // Update Quiz Card
+            updateCardStatus('quiz', gameState.modules.quiz);
+            // Update Plate Card
+            updateCardStatus('plate', gameState.modules.plate);
+            // Update Guide Card
+            updateCardStatus('guide', gameState.modules.guide);
+        }
+
+        function updateCardStatus(modName, modObj) {
+            const card = document.getElementById(`card-${modName}`);
+            const badge = document.getElementById(`badge-status-${modName}`);
+            const btn = document.getElementById(`btn-mod-${modName}`);
+            const iconContainer = card.querySelector('.w-12');
+            
+            if (modObj.completed) {
+                card.classList.remove('opacity-60');
+                badge.textContent = 'Completado';
+                badge.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700';
+                btn.textContent = 'Repasar Módulo';
+                btn.disabled = false;
+                btn.className = 'btn-interact mt-6 w-full py-2.5 px-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl text-sm flex items-center justify-center gap-2';
+                if (modName !== 'quiz') {
+                    const lockIcon = document.getElementById(`lock-icon-${modName}`);
+                    if (lockIcon) lockIcon.className = 'fa-solid fa-check text-emerald-600';
+                }
+            } else if (modObj.unlocked) {
+                card.classList.remove('opacity-60');
+                badge.textContent = 'Disponible';
+                badge.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-teal-100 text-teal-700';
+                btn.textContent = modName === 'quiz' ? 'Jugar Ahora' : (modName === 'plate' ? 'Armar Plato' : 'Consultar Guía');
+                btn.disabled = false;
+                btn.className = `btn-interact mt-6 w-full py-2.5 px-4 bg-${modName === 'plate' ? 'emerald' : modName === 'guide' ? 'indigo' : 'teal'}-50 hover:bg-${modName === 'plate' ? 'emerald' : modName === 'guide' ? 'indigo' : 'teal'}-100 text-${modName === 'plate' ? 'emerald' : modName === 'guide' ? 'indigo' : 'teal'}-700 font-bold rounded-xl text-sm flex items-center justify-center gap-2`;
+                if (modName !== 'quiz') {
+                    const lockIcon = document.getElementById(`lock-icon-${modName}`);
+                    if (lockIcon) lockIcon.className = `fa-solid ${modName === 'plate' ? 'fa-plate-wheat' : 'fa-book-medical'} text-${modName === 'plate' ? 'emerald' : 'indigo'}-600`;
+                }
+            } else {
+                card.classList.add('opacity-60');
+                badge.textContent = 'Bloqueado';
+                badge.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-slate-200 text-slate-500';
+                btn.textContent = 'Bloqueado';
+                btn.disabled = true;
+                btn.className = 'mt-6 w-full py-2.5 px-4 bg-slate-100 text-slate-400 font-bold rounded-xl text-sm flex items-center justify-center gap-2 cursor-not-allowed';
+            }
+
+            renderBadgesSummary();
+        }
+
+        function renderBadgesSummary() {
+            const container = document.getElementById('badges-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const badgesList = [
+                { id: 'quiz', name: 'Sabio de la Glucosa', desc: 'Trivia superada', completed: gameState.modules.quiz.completed, icon: 'fa-brain' },
+                { id: 'plate', name: 'Chef Saludable', desc: 'Plato balanceado creado', completed: gameState.modules.plate.completed, icon: 'fa-utensils' },
+                { id: 'guide', name: 'Explorador GlucoGuide', desc: 'Guía y mitos dominados', completed: gameState.modules.guide.completed, icon: 'fa-award' }
+            ];
+
+            badgesList.forEach(b => {
+                const el = document.createElement('div');
+                el.className = `p-3 rounded-xl border flex items-center gap-3 transition ${b.completed ? 'bg-amber-50/60 border-amber-200 text-slate-800' : 'bg-slate-50 border-slate-200 text-slate-400 opacity-60'}`;
+                el.innerHTML = `
+                    <div class="w-9 h-9 rounded-lg ${b.completed ? 'bg-amber-400 text-white' : 'bg-slate-200 text-slate-400'} flex items-center justify-center font-bold text-sm">
+                        <i class="fa-solid ${b.icon}"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold leading-tight">${b.name}</h4>
+                        <p class="text-[10px] text-slate-500 leading-tight mt-0.5">${b.desc}</p>
+                    </div>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        function navigateTo(viewId) {
+            ['home', 'quiz', 'plate', 'guide'].forEach(v => {
+                const el = document.getElementById('view-' + v);
+                if (el) el.classList.add('hidden');
+            });
+
+            const target = document.getElementById('view-' + viewId);
+            if (target) target.classList.remove('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function tryOpenModule(modName) {
+            if (gameState.modules[modName].unlocked) {
+                navigateTo(modName);
+                if (modName === 'quiz') {
+                    gameState.currentQuestionIdx = 0;
+                    loadQuestion();
+                }
+            } else {
+                alertBox('Módulo Bloqueado', 'Debes completar el módulo anterior para desbloquear esta sección.');
+            }
+        }
+
+        function startQuizModule() {
+            tryOpenModule('quiz');
+        }
+
+        function loadQuestion() {
+            const q = quizData[gameState.currentQuestionIdx];
+            document.getElementById('question-category').textContent = q.category;
+            document.getElementById('question-points').textContent = `+${q.points} pts`;
+            document.getElementById('question-title').textContent = q.question;
+
+            const progressPercent = ((gameState.currentQuestionIdx + 1) / quizData.length) * 100;
+            document.getElementById('quiz-progress-bar').style.width = `${progressPercent}%`;
+            document.getElementById('quiz-progress-text').textContent = `Pregunta ${gameState.currentQuestionIdx + 1} de ${quizData.length}`;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-xl border border-slate-200 hover:border-teal-400 bg-slate-50 hover:bg-teal-50 text-slate-800 text-sm font-medium transition flex items-center justify-between group btn-interact";
+                btn.onclick = () => selectOption(idx);
+                btn.innerHTML = `
+                    <span>${opt}</span>
+                    <i class="fa-regular fa-circle text-slate-300 group-hover:text-teal-500"></i>
+                `;
+                container.appendChild(btn);
+            });
+
+            document.getElementById('feedback-box').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+        }
+
+        function selectOption(selectedIdx) {
+            const q = quizData[gameState.currentQuestionIdx];
+            const isCorrect = selectedIdx === q.correct;
+            const container = document.getElementById('options-container');
+            const buttons = container.querySelectorAll('button');
+
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-teal-50', 'hover:border-teal-400');
+                if (idx === q.correct) {
+                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 text-sm font-semibold flex items-center justify-between";
+                } else if (idx === selectedIdx && !isCorrect) {
+                    btn.className = "w-full text-left p-4 rounded-xl border-2 border-rose-400 bg-rose-50 text-rose-900 text-sm font-semibold flex items-center justify-between";
+                }
+            });
+
+            const fb = document.getElementById('feedback-box');
+            fb.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-800', 'bg-rose-50', 'border-rose-200', 'text-rose-800');
+
+            if (isCorrect) {
+                gameState.score += q.points;
+                fb.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-800');
+                fb.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-2"></i> ${q.explanation}`;
+
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+                }
+            } else {
+                fb.classList.add('bg-rose-50', 'border-rose-200', 'text-rose-800');
+                fb.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 mr-2"></i> La respuesta correcta era: <strong>${q.options[q.correct]}</strong>`;
+            }
+
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            gameState.currentQuestionIdx++;
+            if (gameState.currentQuestionIdx < quizData.length) {
+                loadQuestion();
+            } else {
+                completeModule('quiz');
+            }
+        }
+
+        // Balanced Plate Simulator Logic
+        let selectedPlate = { veg: null, prot: null, carb: null };
+
+        function setFood(category, name) {
+            selectedPlate[category] = name;
+            document.getElementById(`selected-${category}`).textContent = name;
+        }
+
+        function evalPlate() {
+            if (selectedPlate.veg && selectedPlate.prot && selectedPlate.carb) {
+                gameState.score += 150;
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 70, spread: 80, origin: { y: 0.6 } });
+                }
+                completeModule('plate');
+            } else {
+                alertBox('Plato Incompleto', 'Por favor elige un alimento para cada una de las 3 partes del plato.');
+            }
+        }
+
+        function completeModule(modName) {
+            gameState.modules[modName].completed = true;
+
+            // Unlock next module sequentially
+            if (modName === 'quiz') {
+                gameState.modules.plate.unlocked = true;
+            } else if (modName === 'plate') {
+                gameState.modules.guide.unlocked = true;
+            }
+
+            saveState();
+
+            alertBox('¡Módulo Completado!', 'Tu progreso ha sido guardado con éxito y se ha desbloqueado la siguiente sección.', () => {
+                navigateTo('home');
+            });
+        }
+
+        function resetProgress() {
+            if (confirm('¿Deseas reiniciar todo tu progreso y puntos acumulados?')) {
+                localStorage.removeItem('glucoguide_state');
+                gameState = {
+                    score: 0,
+                    modules: {
+                        quiz: { completed: false, unlocked: true },
+                        plate: { completed: false, unlocked: false },
+                        guide: { completed: false, unlocked: false }
+                    },
+                    currentQuestionIdx: 0
+                };
+                saveState();
+                navigateTo('home');
+            }
+        }
+
+        function alertBox(title, message, callback) {
+            const overlay = document.createElement('div');
+            overlay.className = 'fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+            overlay.innerHTML = `
+                <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4 border border-slate-100 float-anim">
+                    <h3 class="text-lg font-bold text-slate-800">${title}</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">${message}</p>
+                    <button id="modal-close-btn" class="btn-interact w-full py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold rounded-xl shadow">
+                        Aceptar
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+
+            document.getElementById('modal-close-btn').onclick = () => {
+                document.body.removeChild(overlay);
+                if (callback) callback();
+            };
+        }
+
+        window.onload = function() {
+            loadState();
+        };
+    </script>
+</body>
+</html>
