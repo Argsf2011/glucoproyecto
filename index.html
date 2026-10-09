@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>GlucoGuide</title>
     
     <!-- Tailwind CSS CDN -->
@@ -99,10 +100,13 @@
 
             <!-- Stats & Quick Controls -->
             <div class="flex items-center gap-2 sm:gap-4">
-                <div class="flex items-center gap-2 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-full text-amber-700 text-xs sm:text-sm font-semibold">
+                <div class="flex items-center gap-2 bg-amber-50 border border-amber-200 px-3.5 py-1.5 rounded-full text-amber-700 text-xs sm:text-sm font-extrabold shadow-sm">
                     <i class="fa-solid fa-star text-amber-500"></i>
                     <span id="score-display">0 pts</span>
                 </div>
+                <button onclick="autoCompleteAllModules()" class="hidden md:inline-flex items-center gap-1.5 text-xs bg-teal-50 hover:bg-teal-100 text-teal-700 font-bold px-3 py-1.5 rounded-xl border border-teal-200 transition" title="Autocompletar Todo (Modo Experto)">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Autocompletar
+                </button>
                 <button onclick="resetProgress()" class="text-xs text-slate-400 hover:text-rose-600 font-medium px-2 py-1 rounded transition" title="Reiniciar Progreso">
                     <i class="fa-solid fa-rotate-right"></i>
                 </button>
@@ -118,11 +122,11 @@
             <div class="relative overflow-hidden bg-gradient-to-br from-teal-500 via-emerald-600 to-teal-700 text-white rounded-3xl p-6 sm:p-10 shadow-xl shadow-teal-500/10">
                 <div class="relative z-10 max-w-2xl space-y-4">
                     <span class="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-teal-100">
-                        <i class="fa-solid fa-graduation-cap"></i> Módulos Interactivos
+                        <i class="fa-solid fa-graduation-cap"></i> Módulos Interactivos de Alto Nivel
                     </span>
-                    <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight">Comprender la Diabetes de forma interactiva</h2>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight">Comprender la Diabetes con rigor clínico</h2>
                     <p class="text-teal-50 text-sm sm:text-base leading-relaxed">
-                        Completa cada módulo secuencialmente. Al finalizar una actividad se guardará tu progreso y se desbloqueará el siguiente desafío.
+                        Completa cada módulo secuencialmente. Acumula puntos de alto valor superando desafíos farmacológicos, nutricionales y metabólicos avanzados.
                     </p>
                     <div class="pt-2 flex flex-wrap gap-3">
                         <button onclick="startQuizModule()" class="btn-interact bg-white text-teal-700 font-bold px-6 py-3 rounded-2xl shadow-lg flex items-center gap-2 hover:bg-teal-50">
@@ -144,9 +148,9 @@
                             </div>
                             <span id="badge-status-quiz" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">Pendiente</span>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-800">1. Cuestionario por Niveles</h3>
+                        <h3 class="text-xl font-bold text-slate-800">1. Cuestionario Clínico Avanzado</h3>
                         <p class="text-slate-600 text-sm">
-                            Aprende sobre glucemia, hipoglucemia e insulina respondiendo preguntas con retroalimentación instantánea.
+                            Responde preguntas profundas sobre farmacología, picos glucémicos y manejo endocrino complejo. (+2,500 pts)
                         </p>
                     </div>
                     <button id="btn-mod-quiz" onclick="startQuizModule()" class="btn-interact mt-6 w-full py-2.5 px-4 bg-teal-50 hover:bg-teal-100 text-teal-700 font-bold rounded-xl text-sm flex items-center justify-center gap-2">
@@ -165,7 +169,7 @@
                         </div>
                         <h3 class="text-xl font-bold text-slate-800">2. Plato Nutricional</h3>
                         <p class="text-slate-600 text-sm">
-                            Arma un menú equilibrado distribuyendo adecuadamente vegetales, proteínas y carbohidratos complejos.
+                            Arma un menú equilibrado distribuyendo adecuadamente vegetales, proteínas y carbohidratos complejos. (+2,000 pts)
                         </p>
                     </div>
                     <button id="btn-mod-plate" onclick="tryOpenModule('plate')" disabled class="mt-6 w-full py-2.5 px-4 bg-slate-100 text-slate-400 font-bold rounded-xl text-sm flex items-center justify-center gap-2 cursor-not-allowed">
@@ -184,7 +188,7 @@
                         </div>
                         <h3 class="text-xl font-bold text-slate-800">3. Guía y Mitos</h3>
                         <p class="text-slate-600 text-sm">
-                            Resuelve dudas sobre mitos habituales, síntomas de alerta y consejos esenciales para el día a día.
+                            Resuelve dudas sobre mitos habituales, síntomas de alerta y consejos esenciales para el día a día. (+1,500 pts)
                         </p>
                     </div>
                     <button id="btn-mod-guide" onclick="tryOpenModule('guide')" disabled class="mt-6 w-full py-2.5 px-4 bg-slate-100 text-slate-400 font-bold rounded-xl text-sm flex items-center justify-center gap-2 cursor-not-allowed">
@@ -210,8 +214,11 @@
                 <button onclick="navigateTo('home')" class="text-slate-500 hover:text-slate-800 text-sm font-semibold flex items-center gap-1.5">
                     <i class="fa-solid fa-arrow-left"></i> Volver al Menú
                 </button>
-                <div class="flex items-center gap-2 text-xs font-bold text-slate-600">
-                    <span id="quiz-progress-text">Pregunta 1 de 3</span>
+                <div class="flex items-center gap-3">
+                    <button onclick="autoCompleteCurrentQuiz()" class="text-xs bg-teal-50 hover:bg-teal-100 text-teal-700 font-bold px-3 py-1 rounded-lg border border-teal-200 transition flex items-center gap-1" title="Completar quiz automáticamente">
+                        <i class="fa-solid fa-bolt"></i> Autocompletar Pregunta
+                    </button>
+                    <span id="quiz-progress-text" class="text-xs font-bold text-slate-600">Pregunta 1 de 5</span>
                 </div>
             </div>
 
@@ -222,10 +229,10 @@
             <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl space-y-6">
                 <div class="flex items-center justify-between">
                     <span id="question-category" class="text-xs font-bold px-3 py-1 bg-teal-100 text-teal-800 rounded-full uppercase tracking-wider">
-                        Conceptos Básicos
+                        Farmacología y Metabolismo
                     </span>
-                    <span id="question-points" class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200">
-                        +100 pts
+                    <span id="question-points" class="text-xs font-extrabold text-amber-600 bg-amber-50 px-3 py-1 rounded-md border border-amber-200">
+                        +500 pts
                     </span>
                 </div>
 
@@ -255,7 +262,12 @@
                 <button onclick="navigateTo('home')" class="text-slate-500 hover:text-slate-800 text-sm font-semibold flex items-center gap-1.5">
                     <i class="fa-solid fa-arrow-left"></i> Volver al Menú
                 </button>
-                <h2 class="text-xl font-bold text-slate-800">Simulador de Plato Balanceado</h2>
+                <div class="flex items-center gap-3">
+                    <button onclick="autoCompletePlate()" class="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold px-3 py-1 rounded-lg border border-emerald-200 transition flex items-center gap-1">
+                        <i class="fa-solid fa-bolt"></i> Autocompletar Plato
+                    </button>
+                    <span class="text-xs font-extrabold text-amber-600 bg-amber-50 px-3 py-1 rounded-md border border-amber-200">+2,000 pts</span>
+                </div>
             </div>
 
             <p class="text-slate-600 text-sm leading-relaxed">
@@ -329,7 +341,7 @@
                 <button onclick="navigateTo('home')" class="text-slate-500 hover:text-slate-800 text-sm font-semibold flex items-center gap-1.5">
                     <i class="fa-solid fa-arrow-left"></i> Volver al Menú
                 </button>
-                <h2 class="text-xl font-bold text-slate-800">Guía de Conocimiento y Mitos</h2>
+                <span class="text-xs font-extrabold text-amber-600 bg-amber-50 px-3 py-1 rounded-md border border-amber-200">+1,500 pts</span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -359,7 +371,7 @@
                         <div class="p-3 bg-rose-50 rounded-xl border border-rose-100">
                             <span class="text-xs font-bold text-rose-700 uppercase">Mito:</span>
                             <p class="text-slate-800 font-semibold text-xs mt-0.5">"Las personas con diabetes no pueden comer fruta."</p>
-                            <p class="text-slate-600 text-xs mt-1"><strong>Realidad:</strong> Las frutas aportan vitaminas y fibra. Se recomienda controlar porciones.</p>
+                            <p class="text-slate-600 text-xs mt-1"><strong>Realidad:</strong> Las frutas aportan vitaminas y fibra. Se recomienda controlar porciones e índice glucémico.</p>
                         </div>
                     </div>
                 </div>
@@ -388,40 +400,64 @@
 
         const quizData = [
             {
-                category: "Conceptos Básicos",
-                points: 100,
-                question: "¿Cuál es la función principal de la insulina en el cuerpo humano?",
+                category: "Farmacología y Metabolismo Celular",
+                points: 500,
+                question: "¿Cuál es el mecanismo de acción predominante de la Metformina en pacientes con diabetes tipo 2 a nivel hepático y muscular?",
                 options: [
-                    "Permitir que la glucosa de la sangre entre a las células para producir energía",
-                    "Aumentar rápidamente el nivel de azúcar tras comer alimentos",
-                    "Ayudar únicamente en la digestión de grasas saturadas"
+                    "Estimula directamente la secreción basal de insulina exógena en las células beta del páncreas.",
+                    "Reduce la producción hepática de glucosa (inhibiendo la gluconeogénesis) y mejora la sensibilidad periférica a la insulina.",
+                    "Bloquea enzimáticamente la absorción de carbohidratos simples directamente en el estómago y duodeno."
+                ],
+                correct: 1,
+                explanation: "¡Correcto! La metformina actúa principalmente disminuyendo la producción hepática de glucosa y aumentando la captación muscular."
+            },
+            {
+                category: "Nutrición y Bioquímica Avanzada",
+                points: 500,
+                question: "¿Por qué el índice glucémico (IG) por sí solo puede ser engañoso al calcular la dosis exacta de insulina postprandial?",
+                options: [
+                    "Porque solo mide la velocidad a la que los carbohidratos elevan la glucemia, mas no la cantidad total (Carga Glucémica).",
+                    "Porque las proteínas y grasas puras nunca influyen en la glucemia bajo ninguna circunstancia.",
+                    "Porque los alimentos con IG alto siempre requieren el triple de insulina independientemente de los gramos."
                 ],
                 correct: 0,
-                explanation: "¡Correcto! La insulina actúa como una 'llave' que abre las células para que la glucosa pueda entrar y suministrar energía."
+                explanation: "¡Excelente! El índice glucémico indica rapidez, pero la 'carga glucémica' considera la porción real ingerida."
             },
             {
-                category: "Alimentación",
-                points: 100,
-                question: "¿Qué tipo de carbohidratos ayuda a mantener estables los niveles de glucosa?",
+                category: "Fisiología y Cetogénesis",
+                points: 500,
+                question: "¿Qué desencadena la producción patológica de cuerpos cetónicos en sangre cuando existe deficiencia absoluta de insulina?",
                 options: [
-                    "Carbohidratos simples como golosinas y gaseosas",
-                    "Carbohidratos complejos ricos en fibra como verduras y cereales integrales",
-                    "Cualquier alimento rico en azúcares procesados"
+                    "El exceso de hidratación y consumo de agua mineral con electrolitos.",
+                    "La lipólisis acelerada debido a que los tejidos recurren a los ácidos grasos libres como fuente energética alternativa.",
+                    "El almacenamiento excesivo de glucógeno hepático puro."
                 ],
                 correct: 1,
-                explanation: "¡Excelente! La fibra de los carbohidratos complejos ralentiza la digestión y evita picos de glucosa."
+                explanation: "¡Muy bien! Sin insulina para utilizar la glucosa, el organismo descompone grasas rápidamente, generando cetonas."
             },
             {
-                category: "Atención y Síntomas",
-                points: 100,
-                question: "Si alguien siente temblor, sudoración fría y mareo, ¿qué condición se sospecha?",
+                category: "Endocrinología Clínica",
+                points: 500,
+                question: "¿Cuál es el propósito fisiológico del 'Fenómeno del Alba' observado durante las primeras horas de la mañana?",
                 options: [
-                    "Hiperglucemia (azúcar elevada)",
-                    "Hipoglucemia (azúcar baja)",
-                    "Falta de sueño"
+                    "Una caída repentina de la frecuencia cardíaca durante la madrugada.",
+                    "Un incremento matutino de hormonas contrarreguladoras (cortisol y hormona de crecimiento) que elevan la glucosa para despertar.",
+                    "La absorción tardía de la cena consumida la noche anterior en el intestino delgado."
                 ],
                 correct: 1,
-                explanation: "¡Muy bien! Son síntomas característicos de hipoglucemia. La acción inmediata recomendada es consumir azúcar de rápida absorción."
+                explanation: "¡Correcto! Las hormonas matutinas preparan al cuerpo para el día elevando de forma natural los niveles de glucosa."
+            },
+            {
+                category: "Monitoreo y Prevención de Urgencias",
+                points: 500,
+                question: "En una hipoglucemia leve a moderada en paciente consciente, ¿por qué se prefiere la regla de los 15-20 con carbohidratos simples?",
+                options: [
+                    "Porque elevan la glucemia con seguridad sin provocar rebotes hiperglucémicos extremos posteriores.",
+                    "Porque los chocolates con alto contenido graso elevan la glucosa en sangre en menos de 2 minutos.",
+                    "Porque los carbohidratos complejos tardan muy poco en digerirse."
+                ],
+                correct: 0,
+                explanation: "¡Perfecto! 15 gramos de carbohidratos de acción rápida elevan la glucemia de forma controlada y segura."
             }
         ];
 
@@ -443,7 +479,7 @@
         }
 
         function updateUI() {
-            document.getElementById('score-display').textContent = `${gameState.score} pts`;
+            document.getElementById('score-display').textContent = `${gameState.score.toLocaleString()} pts`;
 
             // Update Quiz Card
             updateCardStatus('quiz', gameState.modules.quiz);
@@ -457,7 +493,6 @@
             const card = document.getElementById(`card-${modName}`);
             const badge = document.getElementById(`badge-status-${modName}`);
             const btn = document.getElementById(`btn-mod-${modName}`);
-            const iconContainer = card.querySelector('.w-12');
             
             if (modObj.completed) {
                 card.classList.remove('opacity-60');
@@ -499,9 +534,9 @@
             container.innerHTML = '';
 
             const badgesList = [
-                { id: 'quiz', name: 'Sabio de la Glucosa', desc: 'Trivia superada', completed: gameState.modules.quiz.completed, icon: 'fa-brain' },
-                { id: 'plate', name: 'Chef Saludable', desc: 'Plato balanceado creado', completed: gameState.modules.plate.completed, icon: 'fa-utensils' },
-                { id: 'guide', name: 'Explorador GlucoGuide', desc: 'Guía y mitos dominados', completed: gameState.modules.guide.completed, icon: 'fa-award' }
+                { id: 'quiz', name: 'Experto Clínico', desc: 'Trivia avanzada superada (+2,500 pts)', completed: gameState.modules.quiz.completed, icon: 'fa-brain' },
+                { id: 'plate', name: 'Chef Saludable', desc: 'Plato balanceado creado (+2,000 pts)', completed: gameState.modules.plate.completed, icon: 'fa-utensils' },
+                { id: 'guide', name: 'Explorador GlucoGuide', desc: 'Guía y mitos dominados (+1,500 pts)', completed: gameState.modules.guide.completed, icon: 'fa-award' }
             ];
 
             badgesList.forEach(b => {
@@ -551,7 +586,7 @@
         function loadQuestion() {
             const q = quizData[gameState.currentQuestionIdx];
             document.getElementById('question-category').textContent = q.category;
-            document.getElementById('question-points').textContent = `+${q.points} pts`;
+            document.getElementById('question-points').textContent = `+${q.points.toLocaleString()} pts`;
             document.getElementById('question-title').textContent = q.question;
 
             const progressPercent = ((gameState.currentQuestionIdx + 1) / quizData.length) * 100;
@@ -620,6 +655,26 @@
             }
         }
 
+        function autoCompleteCurrentQuiz() {
+            const q = quizData[gameState.currentQuestionIdx];
+            selectOption(q.correct);
+        }
+
+        function autoCompleteAllModules() {
+            gameState.score += 15000;
+            gameState.modules.quiz.completed = true;
+            gameState.modules.plate.unlocked = true;
+            gameState.modules.plate.completed = true;
+            gameState.modules.guide.unlocked = true;
+            gameState.modules.guide.completed = true;
+            saveState();
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 100, spread: 100, origin: { y: 0.5 } });
+            }
+            alertBox('¡Autocompletado con éxito!', 'Todos los módulos han sido marcados como completados para prueba rápida con máxima puntuación.');
+            navigateTo('home');
+        }
+
         // Balanced Plate Simulator Logic
         let selectedPlate = { veg: null, prot: null, carb: null };
 
@@ -628,9 +683,17 @@
             document.getElementById(`selected-${category}`).textContent = name;
         }
 
+        function autoCompletePlate() {
+            selectedPlate = { veg: 'Espinacas y Brócoli', prot: 'Pechuga a la Plancha', carb: 'Arroz Integral' };
+            document.getElementById('selected-veg').textContent = selectedPlate.veg;
+            document.getElementById('selected-prot').textContent = selectedPlate.prot;
+            document.getElementById('selected-carb').textContent = selectedPlate.carb;
+            evalPlate();
+        }
+
         function evalPlate() {
             if (selectedPlate.veg && selectedPlate.prot && selectedPlate.carb) {
-                gameState.score += 150;
+                gameState.score += 2000;
                 if (typeof confetti === 'function') {
                     confetti({ particleCount: 70, spread: 80, origin: { y: 0.6 } });
                 }
@@ -652,7 +715,7 @@
 
             saveState();
 
-            alertBox('¡Módulo Completado!', 'Tu progreso ha sido guardado con éxito y se ha desbloqueado la siguiente sección.', () => {
+            alertBox('¡Módulo Completado!', 'Tu progreso y tus puntos han sido guardados con éxito. Se ha desbloqueado la siguiente sección.', () => {
                 navigateTo('home');
             });
         }
